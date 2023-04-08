@@ -6,9 +6,10 @@ function App() {
   const [options, setOptions] = useState([]);
   const [disabled, setDisabled] = useState(false);
 
-  const fetchData = async (optionText = "") => {
+  const fetchData = async (story, optionText = "") => {
     try {
       const result = await axios.post("http://localhost:8080/chatgpt", {
+        story: story,
         optionText: optionText,
       });
       // Parse the JSON string
@@ -29,9 +30,9 @@ function App() {
     }
   }, [story]);
 
-  const handleOptionClick = async (optionText) => {
+  const handleOptionClick = async (story,optionText) => {
     setDisabled(true);
-    await fetchData(optionText);
+    await fetchData(story,optionText);
     setDisabled(false);
   };
 
@@ -42,7 +43,7 @@ function App() {
       {options && options.map((option, index) => (
         <button
           key={index}
-          onClick={() => handleOptionClick(option)}
+          onClick={() => handleOptionClick(story, option)}
           disabled={disabled}
         >
           {option}
