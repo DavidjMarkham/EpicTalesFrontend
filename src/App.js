@@ -1,32 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function App() {
-  const [message, setMessage] = useState("");
-  const [response, setResponse] = useState("");
+  const [story, setStory] = useState("");
+  const [options, setOptions] = useState([]);
+  const [disabled, setDisabled] = useState(false);
 
-  const sendMessage = async () => {
+  const fetchData = async (optionText = "") => {
     try {
       const result = await axios.post("http://localhost:8080/chatgpt", {
-        message: message,
+        optionText: optionText,
       });
-      setResponse(result.data.response);
+      // Parse the JSON string
+      console.log(result.data.response);
+      const parsedData = JSON.parse(result.data.response);
+
+      setStory(parsedData.story);
+      setOptions(parsedData.options || []);
+
     } catch (error) {
       console.error("Error sending message:", error);
     }
   };
 
+  useEffect(() => {
+    if (!story) {
+      fetchData();
+    }
+  }, [story]);
+
+  const handleOptionClick = async (optionText) => {
+    setDisabled(true);
+    await fetchData(optionText);
+    setDisabled(false);
+  };
+
   return (
     <div className="App">
       <h1>ChatGPT App</h1>
-      <input
-        type="text"
-        placeholder="Type your message here"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-      />
-      <button onClick={sendMessage}>Send</button>
-      {response && <p>ChatGPT Response: {response}</p>}
+      {story && <p>{story}</p>}
+      {options && options.map((option, index) => (
+        <button
+          key={index}
+          onClick={() => handleOptionClick(option)}
+          disabled={disabled}
+        >
+          {option}
+        </button>
+      ))}
+      <button          
+          onClick={() => fetchData("")}
+          disabled={disabled}
+        >
+          BEGIN
+        </button>
     </div>
   );
 }
