@@ -3,8 +3,11 @@ import axios from "axios";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import Box from '@mui/material/Box';
-import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
+import Header from "./Header";
+import Story from "./Story";
+import Options from "./Options";
+
 
 const API_URL = "http://localhost:8080/chatgpt";
 
@@ -50,26 +53,9 @@ function App() {
     <ThemeProvider theme={theme}>
       <div sx={{ p: 3 }}>
       <Box m={2} pt={3}>
-          <Typography variant="h4" sx={{ mb: 3 }}>
-            Choose Your Own Adventure
-          </Typography>
-          {story && (
-            <Typography variant="body1" sx={{ mb: 3 }}>
-              {story}
-            </Typography>
-          )}
-          {options.map((option, index) => (
-            <Button
-              key={index}
-              variant="contained"
-              color="primary"
-              onClick={() => handleOptionClick(story, option)}
-              disabled={isDisabled}
-              sx={{ mr: 1, mb: 1 }}
-            >
-              {option}
-            </Button>
-          ))}
+          <Header />
+          <Story story={story} />
+          <Options story={story} options={options} handleOptionClick={handleOptionClick} isDisabled={isDisabled} />
           {!story && (
             <Button
               variant="contained"
