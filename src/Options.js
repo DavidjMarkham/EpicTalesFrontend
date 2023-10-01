@@ -1,15 +1,14 @@
 import React from "react";
 import Button from "@mui/material/Button";
 
-function Options({ story, options, handleOptionClick, isDisabled }) {
+function Options({ options, handleOptionClick, isDisabled }) {
   return (
     <>
-      {options.map((option, index) => (
+      {options.map((option) => (
         <Button
-          key={index}
           variant="contained"
           color="primary"
-          onClick={() => handleOptionClick(story,option)}
+          onClick={() => handleOptionClick(option)}
           disabled={isDisabled}
           sx={{ mr: 1, mb: 1 }}
         >

@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+// App.js
+
+import React, { useState } from "react";
 import axios from "axios";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Button from "@mui/material/Button";
@@ -8,8 +10,7 @@ import Header from "./Header";
 import Story from "./Story";
 import Options from "./Options";
 
-
-const API_URL = "http://localhost:8080/chatgpt";
+const API_URL = "http://127.0.0.1:5000/api/story";
 
 // Create custom MUI theme
 const theme = createTheme({
@@ -27,25 +28,26 @@ function App() {
 
   const fetchData = async (story, optionText = "") => {
     try {
-      const response = await axios.post(API_URL, { story, optionText });
-      const data = JSON.parse(response.data.response);
-
-      setStory(data.story);
-      setOptions(data.options || []);
+      const response = await axios.post(API_URL, JSON.stringify({ story, optionText }), { headers: { 'Content-Type': 'application/json' } });
+      setStory(response.data.story);
+      setOptions(response.data.options);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
+  
   const handleBeginClick = async () => {
     setIsDisabled(true);
-    await fetchData("");
+    await fetchData();    
+    
     setIsDisabled(false);
   };
 
-  const handleOptionClick = async (story, optionText) => {
-    setIsDisabled(true);
-    await fetchData(story, optionText);
+  const handleOptionClick = async (optionDescription) => {
+    setIsDisabled(true);    
+
+    await fetchData(story,optionDescription);    
+    
     setIsDisabled(false);
   };
 
@@ -60,7 +62,7 @@ function App() {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => handleBeginClick()}
+              onClick={handleBeginClick}
               disabled={isDisabled}
               sx={{ mr: 1, mb: 1 }}
             >
