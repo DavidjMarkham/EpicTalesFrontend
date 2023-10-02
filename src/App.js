@@ -11,9 +11,10 @@ import Outline from "./Outline";
 import Story from "./Story";
 import Options from "./Options";
 import StoryImage from './StoryImage';
-
+import CustomOption from "./CustomOption";
 
 const API_URL = "http://127.0.0.1:5000/api/story";
+const CHAPTER_IMAGE_API_URL = "http://127.0.0.1:5000/api/chapter_image";
 
 // Create custom MUI theme
 const theme = createTheme({
@@ -33,11 +34,17 @@ function App() {
 
   const fetchData = async (story, optionText = "") => {
     try {
-      const response = await axios.post(API_URL, JSON.stringify({ outline, story, optionText, image_url }), { headers: { 'Content-Type': 'application/json' } });
+      let response = await axios.post(API_URL, JSON.stringify({ outline, story, optionText }), { headers: { 'Content-Type': 'application/json' } });
       setOutline(response.data.outline);      
+      setImageUrl(""); // Set image to blank for now until we load it later
       setStory(response.data.story);      
       setOptions(response.data.options);
+      let cur_story = response.data.story;
+
+      // Load chapter image after story is loaded to avoid waiting for image to load
+      response = await axios.post(CHAPTER_IMAGE_API_URL, JSON.stringify({ "story":cur_story }), { headers: { 'Content-Type': 'application/json' } });
       setImageUrl(response.data.image_url);
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -51,8 +58,8 @@ function App() {
   };
 
   const handleOptionClick = async (optionDescription) => {
-    setIsDisabled(true);    
-
+    setIsDisabled(true);  
+        
     await fetchData(story,optionDescription);    
     
     setIsDisabled(false);
@@ -62,10 +69,13 @@ function App() {
     <ThemeProvider theme={theme}>
       <div sx={{ p: 3 }}>
       <Box m={2} pt={3}>
-          <Header />
-          <StoryImage src={image_url}/>
+          <Header />          
           <Story story={story} />
+          <StoryImage src={image_url}/>
+          <br></br>
           <Options story={story} options={options} handleOptionClick={handleOptionClick} isDisabled={isDisabled} />          
+          <br></br>
+          {story && (<CustomOption story={story} handleOptionClick={handleOptionClick} isDisabled={isDisabled} />)}          
           {!story && (
             <Button
               variant="contained"
