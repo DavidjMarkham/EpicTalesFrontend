@@ -103,7 +103,11 @@ function App() {
             Start New Story
           </Button>)}
           <Outline outline={outline} />
+          <br></br>
+          <br></br>
+          Source Code: <a href="https://github.com/DavidjMarkham/InteractiveStoryGeneratorFrontend">Front-end</a>   <a href="https://github.com/DavidjMarkham/InteractiveStoryGeneratorBackend">Backend</a>
         </Box>
+        
       </div>
     </ThemeProvider>
   );
