@@ -1,6 +1,18 @@
-# Getting Started with Create React App
+# About
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is an interactive story generator. It uses AI (OpenAI GPT) to create endless stories that the player can influence the direction of by choosing what happens next.
+- This is the front-end (HTML, Javascript, css) for the interactive story generator, in order to run the app locally you will need to setup the back-end (Python) as well: https://github.com/DavidjMarkham/InteractiveStoryGeneratorBackend
+- This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+# Getting Started
+- Install [Node.js](https://nodejs.org/en/download)
+- Setup the [back-end web server](https://github.com/DavidjMarkham/InteractiveStoryGeneratorBackend) and ensure it is running on port 5000
+- Open a command prompt
+- `git clone https://github.com/DavidjMarkham/InteractiveStoryGeneratorFrontend.git`
+- `cd InteractiveStoryGeneratorFrontend`
+- `npm i`
+- `npm start`
+- Web browser should open to [http://localhost:3000](http://localhost:3000)
 
 ## Available Scripts
 

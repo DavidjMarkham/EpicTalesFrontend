@@ -35,7 +35,7 @@ function App() {
   const fetchData = async (story, optionText = "") => {
     try {
       let response = await axios.post(API_URL, JSON.stringify({ outline, story, optionText }), { headers: { 'Content-Type': 'application/json' } });
-      setOutline(response.data.outline);      
+      //setOutline(response.data.outline); // Uncomment this line if you want to display outline for debugging
       setImageUrl(""); // Set image to blank for now until we load it later
       setStory(response.data.story);      
       setOptions(response.data.options);
@@ -65,6 +65,10 @@ function App() {
     setIsDisabled(false);
   };
 
+  const handleRefreshClick = () => {
+    window.location.reload(); // This will refresh the page
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <div sx={{ p: 3 }}>
@@ -84,10 +88,20 @@ function App() {
               disabled={isDisabled}
               sx={{ mr: 1, mb: 1 }}
             >
-              Begin Adventure
+              Begin Story
             </Button>
           )}
           {isDisabled && <CircularProgress />}
+          <br></br>
+          <br></br>
+          {story && (<Button
+            variant="contained"
+            color="secondary"
+            onClick={handleRefreshClick}
+            sx={{ mr: 1, mb: 1 }}
+          >
+            Start New Story
+          </Button>)}
           <Outline outline={outline} />
         </Box>
       </div>
