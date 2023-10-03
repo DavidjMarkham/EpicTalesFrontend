@@ -1,6 +1,7 @@
 # About
 
 This is an interactive story generator. It uses AI (OpenAI GPT) to create endless stories that the player can influence the direction of by choosing what happens next.
+![Example](images/example.gif)
 - This is the front-end (HTML, Javascript, css) for the interactive story generator, in order to run the app locally you will need to setup the back-end (Python) as well: https://github.com/DavidjMarkham/InteractiveStoryGeneratorBackend
 - This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
