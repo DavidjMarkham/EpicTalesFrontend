@@ -8,11 +8,13 @@ import Box from '@mui/material/Box';
 import CircularProgress from "@mui/material/CircularProgress";
 import Header from "./Header";
 import Outline from "./Outline";
+import StorySoFar from "./StorySoFar";
 import Story from "./Story";
 import Options from "./Options";
 import StoryImage from './StoryImage';
 import CustomOption from "./CustomOption";
 
+const DEBUG = false; // Set to true to enable debugging
 const API_URL = "http://127.0.0.1:5000/api/story";
 const CHAPTER_IMAGE_API_URL = "http://127.0.0.1:5000/api/chapter_image";
 
@@ -27,6 +29,7 @@ const theme = createTheme({
 
 function App() {
   const [outline, setOutline] = useState("");
+  const [storySoFar, setStorySoFar] = useState("");
   const [story, setStory] = useState("");
   const [image_url, setImageUrl] = useState("");
   const [options, setOptions] = useState([]);
@@ -34,17 +37,19 @@ function App() {
 
   const fetchData = async (story, optionText = "") => {
     try {
-      let response = await axios.post(API_URL, JSON.stringify({ outline, story, optionText }), { headers: { 'Content-Type': 'application/json' } });
-      //setOutline(response.data.outline); // Uncomment this line if you want to display outline for debugging
+      let response = await axios.post(API_URL, JSON.stringify({ outline, storySoFar, story, optionText }), { headers: { 'Content-Type': 'application/json' } });
+      setOutline(response.data.outline);
+      setStorySoFar(response.data.storySoFar); 
       setImageUrl(""); // Set image to blank for now until we load it later
       setStory(response.data.story);      
       setOptions(response.data.options);
       let cur_story = response.data.story;
 
       // Load chapter image after story is loaded to avoid waiting for image to load
-      response = await axios.post(CHAPTER_IMAGE_API_URL, JSON.stringify({ "story":cur_story }), { headers: { 'Content-Type': 'application/json' } });
-      setImageUrl(response.data.image_url);
-
+      if(!DEBUG) {
+        response = await axios.post(CHAPTER_IMAGE_API_URL, JSON.stringify({ "story":cur_story }), { headers: { 'Content-Type': 'application/json' } });
+        setImageUrl(response.data.image_url);
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -75,7 +80,7 @@ function App() {
       <Box m={2} pt={3}>
           <Header />          
           <Story story={story} />
-          <StoryImage src={image_url}/>
+          {!DEBUG && <StoryImage src={image_url}/>}
           <br></br>
           <Options story={story} options={options} handleOptionClick={handleOptionClick} isDisabled={isDisabled} />          
           <br></br>
@@ -103,9 +108,7 @@ function App() {
             Start New Story
           </Button>)}
           <Outline outline={outline} />
-          <br></br>
-          <br></br>
-          Source Code: <a href="https://github.com/DavidjMarkham/InteractiveStoryGeneratorFrontend">Front-end</a>   <a href="https://github.com/DavidjMarkham/InteractiveStoryGeneratorBackend">Backend</a>
+          <StorySoFar storySoFar={storySoFar} />
         </Box>
         
       </div>
