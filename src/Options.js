@@ -10,7 +10,7 @@ function Options({ options, handleOptionClick, isDisabled }) {
           color="primary"
           onClick={() => handleOptionClick(option)}
           disabled={isDisabled}
-          sx={{ mr: 1, mb: 1 }}
+          size="large"
         >
           {option}
         </Button>

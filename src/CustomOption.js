@@ -25,6 +25,7 @@ function CustomOption({ handleOptionClick, isDisabled }) {
         variant="contained"
         color="primary"
         disabled={isDisabled}
+        size="large"
       >
         Submit
       </Button>
